@@ -1,0 +1,83 @@
+
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .on {
+            background-color: red;
+        }
+
+        .off {
+            background-color: blue;
+        }
+
+        body {
+            margin: auto;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .record {
+            border: none;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+      
+
+        .first {
+            color: red;
+        }
+    </style>
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+
+    <form method="post" action="/" style="display:flex">
+        <button type="submit" class="record {{state}}" value="{{state}}" name="button">{{name}}</button>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Filename</th>
+            <th scope="col">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for item in fileList %}
+            <tr {% if state=="on" %} {% if loop.first %} class="first" {% endif %} {% endif %}>
+            <th scope="row">{{loop.index}}</th>
+            <td>{{item}}</td>
+            <td> <button style="font-size:24px"><i class="fa fa-trash"></i></button>
+                <button style="font-size:24px"><i class="fa fa-download"></i></button></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+ 
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
