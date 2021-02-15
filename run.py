@@ -86,7 +86,7 @@ class RecordingFile(object):
 
 app = Flask(__name__)
 
-rec = Recorder(channels=2,input_device_index = dev_index)
+rec = Recorder(channels=2,input_device_index = 2)
 open_file = None 
 fileList = ["non-non-blocking.wav", "non-blocking.wav", "blocking.wav"]
 @app.route('/', methods=['GET', 'POST'])
