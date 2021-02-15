@@ -2,13 +2,15 @@ from flask import Flask, request, render_template
 import pyaudio
 import wave
 
+import pyaudio, wave, time, sys
+from datetime import datetime
 
 class Recorder(object):
     '''A recorder class for recording audio to a WAV file.
     Records in mono by default.
     '''
 
-    def __init__(self, channels=1, rate=44100, frames_per_buffer=1024, input_device_index = 0):
+    def __init__(self, channels=1, rate=44100, frames_per_buffer=8192, input_device_index = 0):
         self.channels = channels
         self.rate = rate
         self.dev_index = input_device_index
