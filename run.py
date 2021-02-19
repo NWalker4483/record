@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 import pyaudio
 import wave
-
+import os
 import pyaudio, wave, time, sys
 from datetime import datetime
 
@@ -13,15 +13,15 @@ class Recorder(object):
     def __init__(self, channels=1, rate=44100, frames_per_buffer=8192, input_device_index = 0):
         self.channels = channels
         self.rate = rate
-        self.dev_index = input_device_index
+        self.input_device_index = input_device_index
         self.frames_per_buffer = frames_per_buffer
 
     def open(self, fname, mode='wb'):
-        return RecordingFile(fname, mode, self.dev_index, self.channels, self.rate,
+        return RecordingFile(fname, mode, self.input_device_index, self.channels, self.rate,
                             self.frames_per_buffer)
 
 class RecordingFile(object):
-    def __init__(self, fname, mode, dev_index, channels, 
+    def __init__(self, fname, mode, input_device_index, channels, 
                 rate, frames_per_buffer):
         self.fname = fname
         self.mode = mode
@@ -29,7 +29,7 @@ class RecordingFile(object):
         self.rate = rate
         self.frames_per_buffer = frames_per_buffer
         self._pa = pyaudio.PyAudio()
-        self.dev_index = dev_index
+        self.input_device_index = input_device_index
         self.wavefile = self._prepare_file(self.fname, self.mode)
         self._stream = None
 
@@ -58,7 +58,7 @@ class RecordingFile(object):
                                         rate=self.rate,
                                         input=True,
                                         frames_per_buffer=self.frames_per_buffer,
-                                        input_device_index = self.dev_index,
+                                        input_device_index = self.input_device_index,
                                         stream_callback=self.get_callback())
         self._stream.start_stream()
         return self
@@ -87,10 +87,19 @@ class RecordingFile(object):
         return wavefile
 
 app = Flask(__name__)
+# Get Mixer ID
+mixer_name = ""
+mixer_id = 0
+p = pyaudio.PyAudio()
+for i in range(p.get_device_count()):
+  dev = p.get_device_info_by_index(i)
+  if mixer_name in dev['name']:
+      mixer_id = i
 
-rec = Recorder(channels=2,input_device_index = 2)
+rec = Recorder(channels = 2, input_device_index = mixer_id)
+
 open_file = None 
-fileList = ["non-non-blocking.wav", "non-blocking.wav", "blocking.wav"]
+
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
     global open_file, fileList
@@ -104,9 +113,15 @@ def hello_world():
             print('Stopped Recording')
         if request.form['button'] == 'off':
             state, name = "on", "Stop Recording"
-            open_file = rec.open('nonblocking.wav', 'wb')
+            current_time = str(datetime.now())  #"Date/Time for File Name"
+            current_time = "_".join(current_time.split()).replace(":","-")
+            current_time = current_time[:-7]
+            WAVE_OUTPUT_FILENAME = "recordings/"+'Audio_'+current_time+'.wav'
+
+            open_file = rec.open(WAVE_OUTPUT_FILENAME, 'wb')
             open_file.start_recording()
             print('Started Recording')
+    fileList = os.listdir("recordings")
     return render_template("index.html",state=state, name=name, fileList=fileList)
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port='5000')
