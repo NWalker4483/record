@@ -88,7 +88,7 @@ class RecordingFile(object):
 
 app = Flask(__name__)
 # Get Mixer ID
-mixer_name = ""
+mixer_name = "USB"
 mixer_id = 0
 p = pyaudio.PyAudio()
 for i in range(p.get_device_count()):
@@ -99,7 +99,7 @@ for i in range(p.get_device_count()):
 rec = Recorder(channels = 2, input_device_index = mixer_id)
 
 open_file = None 
-
+# TODO Add filename update
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
     global open_file, fileList
