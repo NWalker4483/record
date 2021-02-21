@@ -124,4 +124,4 @@ def hello_world():
     fileList = os.listdir("recordings")
     return render_template("index.html",state=state, name=name, fileList=fileList)
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000')
+    app.run(host='0.0.0.0', port='80', debug=True)
