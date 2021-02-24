@@ -67,8 +67,16 @@
             <tr {% if state=="on" %} {% if loop.first %} class="first" {% endif %} {% endif %}>
             <th scope="row">{{loop.index}}</th>
             <td>{{item}}</td>
-            <td> <button style="font-size:24px"><i class="fa fa-trash"></i></button>
-                <button style="font-size:24px"><i class="fa fa-download"></i></button></td>
+            <td> 
+              <form action="upload/{{item}}">
+                <input type="submit" class="fa fa-download" value="Upload"> </input>
+            </form>
+            <form action="download/{{item}}">
+                <input type="submit" class="fa fa-download" value="Download"> </input>
+            </form>
+            <form action="delete/{{item}}">
+              <input type="submit" class="fa fa-download" value="Delete"> </input>
+          </form>
           </tr>
           {% endfor %}
         </tbody>
